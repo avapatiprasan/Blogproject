@@ -1,123 +1,109 @@
-import React, { useEffect, useState } from 'react'
-import { Toaster, toast } from "react-hot-toast"
-import "./App.css"
+import React, { useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
+import "./App.css";
+
+const API_URL = "https://698d5dffb79d1c928ed51ba9.mockapi.io/data";
 
 const App = () => {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [data, setData] = useState([])
-
-  const newBlog = {
-    BlogTitle: title,
-    BlogDescription: description
-  }
-
-  async function createBlog() {
-    if (!title || !description) {
-      toast.error("Please fill all fields")
-      return
-    }
-
-    const response = await fetch(
-      "https://698d5dffb79d1c928ed51ba9.mockapi.io/data",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newBlog)
-      }
-    )
-
-    if (response.ok) {
-      toast.success("Blog Created Successfully 🎉")
-      fetchData()
-      setTitle("")
-      setDescription("")
-    } else {
-      toast.error("Failed to create blog")
-    }
-  }
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [data, setData] = useState([]);
 
   async function fetchData() {
-    const result = await fetch(
-      "https://698d5dffb79d1c928ed51ba9.mockapi.io/data/"
-    )
-    const jsonResult = await result.json()
-    setData(jsonResult.reverse())
+    try {
+      const result = await fetch(API_URL);
+      const jsonResult = await result.json();
+      setData(jsonResult.reverse());
+    } catch {
+      toast.error("Failed to fetch blogs");
+    }
   }
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
-  async function deleteBlog(blogItem) {
-    const deletedBlog = await fetch(
-      `https://698d5dffb79d1c928ed51ba9.mockapi.io/data/${blogItem.id}`,
-      {
-        method: "DELETE"
-      }
-    )
+  async function createBlog() {
+    if (!title || !description) {
+      toast.error("Please fill all fields");
+      return;
+    }
 
-    if (deletedBlog.ok) {
-      toast.success("Blog Deleted 🗑️")
-      fetchData()
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        BlogTitle: title,
+        BlogDescription: description,
+      }),
+    });
+
+    if (response.ok) {
+      toast.success("Blog Created 🎉");
+      setTitle("");
+      setDescription("");
+      fetchData();
     } else {
-      toast.error("Failed to delete blog")
+      toast.error("Failed to create blog");
     }
   }
 
-  async function updateBlog(updateItem) {
-    const newTitle = prompt("Enter new Title:")
-    const newDescription = prompt("Enter new Description:")
+  async function deleteBlog(item) {
+    const response = await fetch(`${API_URL}/${item.id}`, {
+      method: "DELETE",
+    });
 
-    if (!newTitle || !newDescription) {
-      toast.error("Fields cannot be empty")
-      return
-    }
-
-    const updatedblog = {
-      BlogTitle: newTitle,
-      BlogDescription: newDescription
-    }
-
-    const blogUpdated = await fetch(
-      `https://698d5dffb79d1c928ed51ba9.mockapi.io/data/${updateItem.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(updatedblog)
-      }
-    )
-
-    if (blogUpdated.ok) {
-      toast.success("Blog Updated ✨")
-      fetchData()
+    if (response.ok) {
+      toast.success("Blog Deleted 🗑️");
+      fetchData();
     } else {
-      toast.error("Failed to update blog")
+      toast.error("Delete failed");
+    }
+  }
+
+  async function updateBlog(item) {
+    const newTitle = prompt("Enter new title:", item.BlogTitle);
+    const newDesc = prompt("Enter new description:", item.BlogDescription);
+
+    if (!newTitle || !newDesc) {
+      toast.error("Fields cannot be empty");
+      return;
+    }
+
+    const response = await fetch(`${API_URL}/${item.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        BlogTitle: newTitle,
+        BlogDescription: newDesc,
+      }),
+    });
+
+    if (response.ok) {
+      toast.success("Blog Updated ✨");
+      fetchData();
+    } else {
+      toast.error("Update failed");
     }
   }
 
   return (
     <div className="app">
-      <Toaster />
-
+      <Toaster position="top-right" />
       <h1 className="heading">Premium Blog App</h1>
 
       <div className="form-card">
         <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
           type="text"
           placeholder="Enter Blog Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
 
         <textarea
+          placeholder="Enter Blog Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Enter Blog Description"
         />
 
         <button className="create-btn" onClick={createBlog}>
@@ -138,7 +124,6 @@ const App = () => {
               >
                 Update
               </button>
-
               <button
                 className="delete-btn"
                 onClick={() => deleteBlog(item)}
@@ -150,7 +135,7 @@ const App = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -5,41 +5,45 @@
   font-family: "Poppins", sans-serif;
 }
 
-.app {
+body {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
   min-height: 100vh;
-  width: 100%;
-  padding: 40px;
-  background: linear-gradient(135deg, #f5f7fa, #e4eaf3);
+  padding: 20px;
+  color: white;
+}
+
+.app {
+  max-width: 1200px;
+  margin: auto;
 }
 
 .heading {
   text-align: center;
-  margin-bottom: 40px;
-  font-size: 34px;
-  color: #222;
+  margin-bottom: 30px;
+  font-size: 40px;
 }
 
-/* Form Card */
+/* =========================
+   FORM CARD
+========================= */
+
 .form-card {
-  width: 100%;
-  max-width: 600px;
-  margin: auto;
-  background: white;
+  background: #1e293b;
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-bottom: 50px;
 }
 
 .form-card input,
 .form-card textarea {
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  border: none;
+  outline: none;
+  font-size: 14px;
 }
 
 .form-card textarea {
@@ -48,35 +52,37 @@
 }
 
 .create-btn {
-  padding: 12px;
+  background: #3b82f6;
   border: none;
-  background: #007bff;
-  color: white;
-  font-size: 16px;
+  padding: 10px;
   border-radius: 8px;
+  color: white;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 .create-btn:hover {
-  background: #0056b3;
+  background: #2563eb;
 }
 
-/* Blog Grid - FULL LAPTOP WIDTH */
+/* =========================
+   BLOG GRID (DESKTOP)
+========================= */
+
 .blog-list {
-  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 25px;
 }
 
-/* Blog Card */
+/* =========================
+   BLOG CARD
+========================= */
+
 .blog-card {
-  background: white;
+  background: #1e293b;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: 0.3s;
+  transition: 0.3s ease;
 }
 
 .blog-card:hover {
@@ -85,57 +91,72 @@
 
 .blog-card h2 {
   margin-bottom: 10px;
-  color: #333;
+  font-size: 20px;
 }
 
 .blog-card p {
   margin-bottom: 15px;
-  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-/* Buttons */
+/* =========================
+   CARD BUTTONS
+========================= */
+
 .card-buttons {
   display: flex;
-  justify-content: space-between;
   gap: 10px;
 }
 
 .update-btn {
   flex: 1;
-  background: #28a745;
-  color: white;
+  background: #22c55e;
   border: none;
   padding: 8px;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
 }
 
 .delete-btn {
   flex: 1;
-  background: #dc3545;
-  color: white;
+  background: #ef4444;
   border: none;
   padding: 8px;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
 }
 
-/* 📱 Mobile View */
-@media (max-width: 768px) {
+.update-btn:hover {
+  background: #16a34a;
+}
 
-  .app {
-    padding: 20px;
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+  .blog-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .heading {
+    font-size: 28px;
   }
 
-  .heading {
-    font-size: 24px;
+  .blog-list {
+    grid-template-columns: 1fr;
   }
 
   .form-card {
     padding: 15px;
-  }
-
-  .card-buttons {
-    flex-direction: column;
   }
 }
